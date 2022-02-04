@@ -45,9 +45,26 @@ section code
 ;     ret
 
 .switch:
+    mov ax, 0x4f01 ; querying the VBE
+    mov cx, 0x117 ; required mode
+    mov bx, 0x0800 ; offset for the VBE infrastructure
+    mov es, bx
+    mov di, 0x00
+    int 0x10
+
+    ; make switch to graphics mode
+
+    mov ax, 0x4f02
+    mov bx, 0x117
+    int 0x10
+
+    xor ax, ax
+    mov ds, ax
+    mov es, ax
+
     mov bx, 0x1000 ; location of the code being loaded from the hard disk
     mov ah, 0x02
-    mov al, 30 ; number of sectors to read from the hard disk
+    mov al, 1 ; number of sectors to read from the hard disk
     mov ch, 0x00
     mov dh, 0x00
     mov cl, 0x02
@@ -74,6 +91,7 @@ protected_start:
     mov gs, ax
 
     ; update stack pointer
+
     mov ebp, 0x90000
     mov esp, ebp
 
