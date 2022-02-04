@@ -9,10 +9,10 @@ bootloader:
 	ld -m i386pe -o boot/bin/kernel.img -Ttext 0x1000 boot/bin/kernel_entry.bin boot/bin/kernel.o
 
 	objcopy -O binary -j .text boot/bin/kernel.img boot/bin/kernel.bin
-	type boot/bin/boot.bin boot/bin/kernel.bin > os.img
+	type "boot\bin\boot.bin" "boot\bin\kernel.bin" > "os.img"
 
 clear:
-	rm -f boot/boot.img
- 
+	rm -f "boot\bin" "os.img"
+
 run:
 	qemu-system-x86_64.exe -drive format=raw,file=os.img
