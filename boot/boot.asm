@@ -46,7 +46,7 @@ section code
 
 .switch:
     mov ax, 0x4f01 ; querying the VBE
-    mov cx, 0x117 ; required mode
+    mov cx, 0x111 ; required mode
     mov bx, 0x0800 ; offset for the VBE infrastructure
     mov es, bx
     mov di, 0x00
@@ -55,7 +55,7 @@ section code
     ; make switch to graphics mode
 
     mov ax, 0x4f02
-    mov bx, 0x117
+    mov bx, 0x111
     int 0x10
 
     xor ax, ax
