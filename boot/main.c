@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "graphics/graphics.h"
 
 int start() {
     // String literals are limited to 61 characters
