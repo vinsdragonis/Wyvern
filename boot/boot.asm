@@ -103,14 +103,14 @@ gdt_null_descriptor:
     dd 0x00
     dd 0x00
 gdt_code_seg:
-    dw 0xffff
+    dw 0xeeee
     dw 0x00
     db 0x00
     db 10011010b
     db 11001111b
     db 0x00
 gdt_data_seg:
-    dw 0xffff
+    dw 0xeeee
     dw 0x00
     db 0x00
     db 10010010b
