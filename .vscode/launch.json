@@ -9,9 +9,9 @@
         ""
       ],
       "stopAtEntry": false,
-      "cwd": "e:/GitHub/Wyvern",
+      "cwd": "e:/Wyvern",
       "environment": [],
-      "program": "e:/GitHub/Wyvern/build/Debug/outDebug",
+      "program": "e:/Wyvern/build/Debug/outDebug",
       "internalConsoleOptions": "openOnSessionStart",
       "MIMode": "gdb",
       "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
