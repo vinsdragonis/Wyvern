@@ -4,27 +4,30 @@ START:
     call _start
     jmp $
 
-; extern _idt, HandleISR1, HandleISR12
-; global isr1, isr12
-; global LoadIDT
+extern _idt
+extern _HandleISR1
+extern _HandleISR12
 
-; IDTDesc:
-;     dw 2048
-;     dd _idt
+global _isr1, _isr12
+global _LoadIDT
 
-; isr1:
-;     pusha
-;     call HandleISR1
-;     popa
-;     iret
+IDTDesc:
+    dw 2048
+    dd _idt
 
-; isr12:
-;     pusha
-;     call HandleISR12
-;     popa
-;     iret
+_isr1:
+    pusha
+    call _HandleISR1
+    popa
+    iret
 
-; LoadIDT:
-;     lidt[IDTDesc]
-;     sti
-;     ret
+_isr12:
+    pusha
+    call _HandleISR12
+    popa
+    iret
+
+_LoadIDT:
+    lidt[IDTDesc]
+    sti
+    ret

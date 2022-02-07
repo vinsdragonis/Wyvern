@@ -21,8 +21,8 @@
 
 void InitializeIDT();
 extern void LoadIDT();
-void HandleISR1();
-void HandleISR12();
+void _HandleISR1();
+void _HandleISR12();
 void RemapPIC();
 
 struct IDTElement {
@@ -33,7 +33,7 @@ struct IDTElement {
     unsigned short higher;
 };
 
-struct IDTElement _idt[256];
+struct IDTElement idt[256];
 extern unsigned int isr1, isr12;
 unsigned int base, base12;
 
@@ -50,22 +50,22 @@ void outportb(unsigned short port, unsigned char data) {
 }
 
 void InitializeIDT() {
-    _idt[1].lower = (base12 & 0xffff);
-    _idt[1].higher = (base12 >> 16) & 0xffff;
-    _idt[1].selector = 0x08;
-    _idt[1].zero = 0;
-    _idt[1].flags = 0x8e;
+    idt[1].lower = (base & 0xffff);
+    idt[1].higher = (base >> 16) & 0xffff;
+    idt[1].selector = 0x08;
+    idt[1].zero = 0;
+    idt[1].flags = 0x8e;
 
-    _idt[12].lower = (base12 & 0xffff);
-    _idt[12].higher = (base12 >> 16) & 0xffff;
-    _idt[12].selector = 0x08;
-    _idt[12].zero = 0;
-    _idt[12].flags = 0x8e;
+    idt[12].lower = (base12 & 0xffff);
+    idt[12].higher = (base12 >> 16) & 0xffff;
+    idt[12].selector = 0x08;
+    idt[12].zero = 0;
+    idt[12].flags = 0x8e;
 
     RemapPIC();
 
     outportb(0x21, 0b11111001);
-    outportb(0xa1, 0xff);
+    outportb(0xa1, 0x00);
 
     LoadIDT();
 }
@@ -160,13 +160,10 @@ void InitializeMouse() {
 
     MouseWait(1);
     outportb(0x64, 0x20);
-
     MouseWait(0);
     status = (inportb(0x60) | 2);
-
     MouseWait(1);
     outportb(0x64, 0x60);
-
     MouseWait(1);
     outportb(0x60, status);
 
