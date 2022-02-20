@@ -1,28 +1,34 @@
+#include <stdint.h>
+
+int x, y;
+int left_clicked, right_clicked, middle_clicked;
+int current_byte = 0;
+uint8_t bytes[4] = {0};
+int mouse_speed = 5;
+
 #define pic1_command 0x20
 #define pic1_data 0x21
-#define pic2_command 0x20
-#define pic2_data 0x21
+#define pic2_command 0xa0
+#define pic2_data 0xa1
 #define icw1_def 0x10
 #define icw1_icw4 0x01
 #define icw4_x86 0x01
 
-#define y_overflow      0b10000000
-#define x_overflow      0b01000000
-#define y_negative      0b00100000
-#define x_negative      0b00010000
-#define always_set      0b00001000
-#define middle_click    0b00000100
-#define right_click     0b00000010
-#define left_click      0b00000001
-#define unused_a        0b10000000
-#define unused_b        0b01000000
-
-#include <stdint.h>
+#define y_overflow       0b10000000
+#define x_overflow       0b01000000
+#define y_negative       0b00100000
+#define x_negative       0b00010000
+#define always_set       0b00001000
+#define middle_click     0b00000100
+#define right_click      0b00000010
+#define left_click       0b00000001
+#define unused_a         0b10000000
+#define unused_b         0b01000000
 
 void InitializeIDT();
 extern void LoadIDT();
-void _HandleISR1();
-void _HandleISR12();
+void HandleISR1();
+void HandleISR12();
 void RemapPIC();
 
 struct IDTElement {
@@ -107,11 +113,6 @@ void HandleISR12() {
     outportb(0x20, 0x20);
 }
 
-int x, y;
-int left_clicked, right_clicked, middle_clicked;
-int current_byte = 0;
-uint8_t bytes[4] = { 0 };
-
 void MouseWait(unsigned char type)
 {
     int time_out = 100000;
@@ -160,10 +161,13 @@ void InitializeMouse() {
 
     MouseWait(1);
     outportb(0x64, 0x20);
+
     MouseWait(0);
     status = (inportb(0x60) | 2);
+
     MouseWait(1);
     outportb(0x64, 0x60);
+
     MouseWait(1);
     outportb(0x60, status);
 
@@ -212,12 +216,12 @@ void HandleMousePacket() {
     middle_clicked = status & middle_click;
 
     if (change_x > 0)
-        x += 5;
+        x += 2;
     else if (change_x < 0)
-        x -= 5;
+        x -= 2;
 
     if (change_y > 0)
-        y -= 5;
+        y -= 2;
     else if (change_y < 0)
-        y += 5;
+        y += 2;
 }

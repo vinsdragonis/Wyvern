@@ -4,10 +4,7 @@ START:
     call _start
     jmp $
 
-extern _idt
-extern _HandleISR1
-extern _HandleISR12
-
+extern _idt, _HandleISR1, _HandleISR12
 global _isr1, _isr12
 global _LoadIDT
 
