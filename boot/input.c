@@ -1,23 +1,29 @@
+#include <stdint.h>
+
+int x, y;
+int left_clicked, right_clicked, middle_clicked;
+int current_byte = 0;
+uint8_t bytes[4] = {0};
+int mouse_speed = 5;
+
 #define pic1_command 0x20
 #define pic1_data 0x21
-#define pic2_command 0x20
-#define pic2_data 0x21
+#define pic2_command 0xa0
+#define pic2_data 0xa1
 #define icw1_def 0x10
 #define icw1_icw4 0x01
 #define icw4_x86 0x01
 
-#define y_overflow      0b10000000
-#define x_overflow      0b01000000
-#define y_negative      0b00100000
-#define x_negative      0b00010000
-#define always_set      0b00001000
-#define middle_click    0b00000100
-#define right_click     0b00000010
-#define left_click      0b00000001
-#define unused_a        0b10000000
-#define unused_b        0b01000000
-
-#include <stdint.h>
+#define y_overflow       0b10000000
+#define x_overflow       0b01000000
+#define y_negative       0b00100000
+#define x_negative       0b00010000
+#define always_set       0b00001000
+#define middle_click     0b00000100
+#define right_click      0b00000010
+#define left_click       0b00000001
+#define unused_a         0b10000000
+#define unused_b         0b01000000
 
 void InitializeIDT();
 extern void LoadIDT();
@@ -33,7 +39,7 @@ struct IDTElement {
     unsigned short higher;
 };
 
-struct IDTElement _idt[256];
+struct IDTElement idt[256];
 extern unsigned int isr1, isr12;
 unsigned int base, base12;
 
@@ -50,22 +56,22 @@ void outportb(unsigned short port, unsigned char data) {
 }
 
 void InitializeIDT() {
-    _idt[1].lower = (base12 & 0xffff);
-    _idt[1].higher = (base12 >> 16) & 0xffff;
-    _idt[1].selector = 0x08;
-    _idt[1].zero = 0;
-    _idt[1].flags = 0x8e;
+    idt[1].lower = (base & 0xffff);
+    idt[1].higher = (base >> 16) & 0xffff;
+    idt[1].selector = 0x08;
+    idt[1].zero = 0;
+    idt[1].flags = 0x8e;
 
-    _idt[12].lower = (base12 & 0xffff);
-    _idt[12].higher = (base12 >> 16) & 0xffff;
-    _idt[12].selector = 0x08;
-    _idt[12].zero = 0;
-    _idt[12].flags = 0x8e;
+    idt[12].lower = (base12 & 0xffff);
+    idt[12].higher = (base12 >> 16) & 0xffff;
+    idt[12].selector = 0x08;
+    idt[12].zero = 0;
+    idt[12].flags = 0x8e;
 
     RemapPIC();
 
     outportb(0x21, 0b11111001);
-    outportb(0xa1, 0xff);
+    outportb(0xa1, 0x00);
 
     LoadIDT();
 }
@@ -106,11 +112,6 @@ void HandleISR12() {
     outportb(0xa0, 0x20);
     outportb(0x20, 0x20);
 }
-
-int x, y;
-int left_clicked, right_clicked, middle_clicked;
-int current_byte = 0;
-uint8_t bytes[4] = { 0 };
 
 void MouseWait(unsigned char type)
 {
@@ -215,12 +216,12 @@ void HandleMousePacket() {
     middle_clicked = status & middle_click;
 
     if (change_x > 0)
-        x += 5;
+        x += 2;
     else if (change_x < 0)
-        x -= 5;
+        x -= 2;
 
     if (change_y > 0)
-        y -= 5;
+        y -= 2;
     else if (change_y < 0)
-        y += 5;
+        y += 2;
 }

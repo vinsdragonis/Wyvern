@@ -64,7 +64,7 @@ section code
 
     mov bx, 0x1000 ; location of the code being loaded from the hard disk
     mov ah, 0x02
-    mov al, 21 ; number of sectors to read from the hard disk
+    mov al, 25 ; number of sectors to read from the hard disk
     mov ch, 0x00
     mov dh, 0x00
     mov cl, 0x02
@@ -78,8 +78,6 @@ section code
     mov cr0, eax ; make the switch
 
     jmp code_seg:protected_start
-
-startupmsg: db 'Welcome to Wyvern!', 0
 
 [bits 32]
 protected_start:
