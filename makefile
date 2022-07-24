@@ -12,7 +12,7 @@ bootloader:
 	type "boot\bin\boot.bin" "boot\bin\kernel.bin" > "os.img"
 
 clear:
-	rm -f ".\boot\bin"; rm ".\os.img"
+	rm -Force ".\boot\bin";
 
 run:
 	qemu-system-x86_64.exe -drive format=raw,file=os.img
