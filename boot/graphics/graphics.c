@@ -69,16 +69,16 @@ void DrawString(int (*f)(int, int), int font_width, int font_height, char *c, in
 
 void DrawMouse(int x, int y, int r, int g, int b) {
     int mouse[] = {
-        0b1111111111,
-        0b1111111110,
-        0b1111111100,
-        0b1111111000,
-        0b1111110000,
-        0b1111100000,
-        0b1111000000,
-        0b1110000000,
-        0b1100000000,
-        0b1000000000,
+        0b0000000000,
+        0b0100000000,
+        0b0110000000,
+        0b0111000000,
+        0b0111100000,
+        0b0111110000,
+        0b0111111000,
+        0b0111111100,
+        0b0000110000,
+        0b1000011000,
     };
 
     int mouse_width = 10, mouse_height = 10;
